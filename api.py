@@ -52,11 +52,11 @@ def generate_new_api_key(username: str, email: str) -> dict:
     if username != "" or email != "":
         account = get_account(username, email)
         if account:
+            if not account.status:
+                return {"status": 400, "message": "You need to buy a subscription to regenerate API key. Please contact https://t.me/abdibrokhim"}
             return {"status": 200, "api_key": account.regenerate_api_key()}
-        else:
-            return {"status": 400, "message": "Account does not exists"}
-    else:
-        return {"status": 400, "message": "Either username or email is missing"}
+        return {"status": 400, "message": "Account does not exists"}
+    return {"status": 400, "message": "Either username or email is missing"}
     
 
 @app.get("/api/get_api_key/{username}&{email}")
@@ -65,10 +65,8 @@ def get_valid_api_key(username: str, email: str) -> dict:
         account = get_account(username, email)
         if account:
             return {"status": 200, "api_key": account.get_api_key()}
-        else:
-            return {"status": 400, "message": "Account does not exists"}
-    else:
-        return {"status": 400, "message": "Either username or email is missing"}
+        return {"status": 400, "message": "Account does not exists"}
+    return {"status": 400, "message": "Either username or email is missing"}
 
 
 @app.get("/api/get_user_data/{username}&{email}")
@@ -76,11 +74,9 @@ def get_user_data(username: str, email: str) -> dict:
     if username != "" or email != "":
         account = get_account(username, email)
         if account:
-            return {"status": 200, "username": account.username, "email": account.email, "api_key": account.get_api_key(), "request_count": account.get_request_count(), "created_at": account.created_at}
-        else:
-            return {"status": 400, "message": "Account does not exists"}
-    else:
-        return {"status": 400, "message": "Username or API key is missing"}
+            return {"status": 200, "username": account.username, "email": account.email, "api_key": account.get_api_key(), "request_count": account.get_request_count(), "subscribed": account.status, "created_at": account.created_at}
+        return {"status": 400, "message": "Account does not exists"}
+    return {"status": 400, "message": "Username or API key is missing"}
 
 
 @app.post("/api/update_score/")
@@ -90,6 +86,7 @@ def update_score(api_key: str, url: str, score: int, playtime: int = 0) -> dict:
         if account:
             request_count = account.get_request_count()
             if request_count % 100 == 0:
+                account.status = True
                 return {"status": 400, "message": "Request limit exceeded. Please regenerate your API key"}
             if url != "" and score != "":
                 try:
@@ -100,12 +97,9 @@ def update_score(api_key: str, url: str, score: int, playtime: int = 0) -> dict:
                     return {"status": 200, "message": "Score updated successfully"}
                 except Exception as e:
                     return {"status": 400, "message": "Score update failed"}
-            else:
-                return {"status": 400, "message": "Either url or score is missing"}
-        else:
-            return {"status": 400, "message": "Invalid API key"}
-    else:
-        return {"status": 400, "message": "API key is missing"}
+            return {"status": 400, "message": "Either url or score is missing"}
+        return {"status": 400, "message": "Invalid API key"}
+    return {"status": 400, "message": "API key is missing"}
     
 
 @app.post("/api/signup/")
@@ -115,14 +109,13 @@ def signup(username: str, email: str) -> dict:
             account = get_account(username, email)
             if account:
                 return {"status": 400, "message": "Account already exists"}
-            else:
-                account = Account(username=username, email=email, api_key=secrets.token_urlsafe(16))
-                account.save()
-                return {"status": 200, "message": "Account created successfully"}
+            account = Account(username=username, email=email, api_key=secrets.token_urlsafe(16))
+            account.save()
+
+            return {"status": 200, "message": "Account created successfully"}
         except Exception as e:
             return {"status": 400, "message": "Account creation failed"}
-    else:
-        return {"status": 400, "message": "Either username or email is missing"}
+    return {"status": 400, "message": "Either username or email is missing"}
     
 
 # if __name__ == '__main__':

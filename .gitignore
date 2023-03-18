@@ -6,6 +6,7 @@ __pycache__
 .dccache
 .DS_Store
 app/__pycache__
+app/migrations
 config/__pycache__
 .vscode
 db.sqlite3

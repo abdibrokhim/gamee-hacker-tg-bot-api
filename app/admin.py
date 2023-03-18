@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Account
 
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('username', 'api_key', 'request_count', 'created_at')
+    list_display = ('username', 'email', 'api_key', 'request_count', 'status', 'created_at')
     search_fields = ('username', 'api_key')
     actions = ['regenerate_api_key']
 

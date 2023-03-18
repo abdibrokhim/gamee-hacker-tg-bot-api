@@ -8,6 +8,7 @@ class Account(models.Model):
     email = models.EmailField(max_length=255, blank=True, null=True)
     api_key = models.CharField(max_length=255, blank=True, null=True)
     request_count = models.IntegerField(default=0)
+    status = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
