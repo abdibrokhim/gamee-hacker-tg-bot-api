@@ -197,9 +197,13 @@ class GameeHacker:
             },
         }
         json_data = json.dumps(data)
-        response = requests.post(
-            "https://api.service.gameeapp.com/", headers=headers, data=json_data
-        ).json()
-        self.response_data = response
-        return response
+        try:
+            response = requests.post(
+                "https://api.service.gameeapp.com/", headers=headers, data=json_data
+            ).json()
+            self.response_data = response
+            return response
+        except Exception as e:
+            print(e)
+            return ""
 

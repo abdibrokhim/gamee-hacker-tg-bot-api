@@ -91,10 +91,12 @@ def update_score(api_key: str, url: str, score: int, playtime: int = 0) -> dict:
             if url != "" and score != "":
                 try:
                     gamee = core.GameeHacker(url, score, playtime)
-                    gamee.send_score()
-                    account.increase_request_count()
+                    r = gamee.send_score()
 
-                    return {"status": 200, "message": "Score updated successfully"}
+                    if r.status_code == 200:
+                        account.increase_request_count()
+
+                        return {"status": 200, "message": "Score updated successfully"}
                 except Exception as e:
                     return {"status": 400, "message": "Score update failed"}
             return {"status": 400, "message": "Either url or score is missing"}
