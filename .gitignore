@@ -1,5 +1,5 @@
 .idea
-venv
+.venv
 env
 .env
 __pycache__
@@ -11,3 +11,4 @@ config/__pycache__
 .vscode
 db.sqlite3
 test.py
+venv
