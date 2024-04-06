@@ -6,7 +6,5 @@ services:
     buildCommand: "./build.sh"
     startCommand: "python3 -m api.py"
     env:
-      - key: SECRET_KEY
-        generateValue: true
       - key: WEB_CONCURRENCY
         value: 4
