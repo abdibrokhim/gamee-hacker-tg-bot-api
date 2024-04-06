@@ -5,4 +5,4 @@ djangorestframework
 markdown
 django-filter
 requests
-
+python-dotenv
