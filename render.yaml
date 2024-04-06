@@ -5,6 +5,3 @@ services:
     runtime: python
     buildCommand: "./build.sh"
     startCommand: "python3 -m api.py"
-    env:
-      - key: WEB_CONCURRENCY
-        value: 4
