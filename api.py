@@ -33,5 +33,5 @@ def update_score(url: str, score: int, playtime: int = 0) -> dict:
     return {"status": 400, "message": "Either url or score is missing"}
     
 
-if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=8080)
+# if __name__ == '__main__':
+    # uvicorn.run(app, host='0.0.0.0', port=8080)

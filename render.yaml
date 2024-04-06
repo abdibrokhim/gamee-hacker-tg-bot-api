@@ -4,4 +4,4 @@ services:
     name: mysite
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "python3 -m api.py"
+    startCommand: "uvicorn api:app --reload"
